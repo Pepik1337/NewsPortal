@@ -1,8 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class News(models.Model):
+    title = models.CharField(max_length=200)
+    text = models.TextField()
+    date_published = models.DateTimeField(auto_now_add=True)
 
-# Create your models here.
+    def __str__(self):
+        return self.title
+
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
@@ -17,8 +23,14 @@ class Author(models.Model):
         self.rating = post_rating * 3 + comment_rating + post_comment_rating
         self.save()
 
+    def __str__(self):
+        return f'{self.user.username}'
+
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
+
+    def __str__(self):
+        return self.name
 
 class Post(models.Model):
     ARTICLE = 'AR'
@@ -46,6 +58,9 @@ class Post(models.Model):
 
     def preview(self):
         return self.text[:124] + '...'
+
+    def __str__(self):
+        return f'{self.title}'
 
 
 class PostCategory(models.Model):
